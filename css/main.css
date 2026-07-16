@@ -5891,7 +5891,7 @@ a.cf-detail-value:hover {
    ========================================================================== */
 
 .tm-section {
-  background-color: #fafbfc !important; /* light background matching ref image */
+  background-color: #ffffff !important; /* solid white background matching reference */
   min-height: auto !important;
   padding: 6.5rem 0 !important;
   display: block !important;
@@ -5904,10 +5904,25 @@ a.cf-detail-value:hover {
   padding: 0 2rem !important;
 }
 
+/* Large quote icon above title */
+.tm-section-quote-mark {
+  display: block !important;
+  color: #1a202c !important; /* Dark quote */
+  width: 44px !important;
+  height: 44px !important;
+  margin-bottom: 1rem !important;
+  opacity: 0.9 !important;
+}
+
+.tm-section-quote-mark svg {
+  width: 100% !important;
+  height: 100% !important;
+}
+
 .tm-header {
   display: flex !important;
-  justify-content: space-between !important;
-  align-items: flex-end !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
   margin-bottom: 3.5rem !important;
   width: 100% !important;
 }
@@ -5937,43 +5952,6 @@ a.cf-detail-value:hover {
   color: var(--color-green-light) !important;
 }
 
-/* Arrows styling */
-.tm-nav-arrows {
-  display: flex !important;
-  gap: 0.75rem !important;
-  margin-top: 0 !important;
-}
-
-.tm-nav-btn {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: 48px !important;
-  height: 48px !important;
-  border-radius: 50% !important;
-  border: 1.5px solid #e2e8f0 !important;
-  background-color: #ffffff !important;
-  color: #4a5568 !important;
-  cursor: pointer !important;
-  transition: all 0.3s ease !important;
-  flex-shrink: 0 !important;
-}
-
-.tm-nav-btn:not(:disabled):hover {
-  background-color: #ffffff !important;
-  border-color: var(--color-primary) !important;
-  color: var(--color-primary) !important;
-  transform: scale(1.05) !important;
-}
-
-.tm-nav-btn:disabled {
-  opacity: 0.3 !important;
-  cursor: not-allowed !important;
-  border-color: #e2e8f0 !important;
-  background-color: #ffffff !important;
-  color: #a0aec0 !important;
-}
-
 /* Cards track and slider container */
 .tm-cards-wrapper {
   width: 100% !important;
@@ -5984,7 +5962,7 @@ a.cf-detail-value:hover {
   display: flex !important;
   gap: 2rem !important;
   overflow-x: auto !important;
-  padding: 1rem 0.25rem 3rem 0.25rem !important;
+  padding: 1rem 0.25rem 2rem 0.25rem !important;
   scroll-behavior: smooth !important;
   scrollbar-width: none !important;
   -ms-overflow-style: none !important;
@@ -5995,64 +5973,47 @@ a.cf-detail-value:hover {
   display: none !important;
 }
 
-/* Card item */
+/* Card item matching Style of Reference Image */
 .tm-card {
   flex-shrink: 0 !important;
   width: calc(33.333% - 1.333rem) !important;
-  min-width: 320px !important;
-  background-color: #ffffff !important;
-  border: 1px solid rgba(10, 54, 92, 0.08) !important;
-  border-radius: 0 !important; /* Global sharp corners guidelines */
-  padding: 2.25rem !important;
-  box-shadow: 0 10px 30px rgba(10, 54, 92, 0.015) !important;
+  min-width: 340px !important;
+  background-color: #f7f9fa !important; /* light grey container bg */
+  border: none !important;
+  border-radius: 0 !important; /* Sharp edges */
+  padding: 2.5rem !important;
   display: flex !important;
   flex-direction: column !important;
-  justify-content: space-between !important;
-  min-height: 280px !important;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease !important;
+  justify-content: flex-start !important;
+  min-height: 290px !important;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease, box-shadow 0.4s ease !important;
 }
 
 .tm-card:hover {
-  transform: translateY(-8px) !important;
-  box-shadow: 0 20px 45px rgba(10, 54, 92, 0.06) !important;
-  border-color: var(--color-green-light) !important;
+  background-color: #f1f3f5 !important;
+  transform: translateY(-5px) !important;
+  box-shadow: 0 12px 30px rgba(10, 54, 92, 0.04) !important;
 }
 
-/* Quote Icon */
-.tm-card-quote-icon {
-  display: block !important;
-  color: var(--color-green-light) !important;
-  width: 36px !important;
-  height: 36px !important;
-  margin-bottom: 1.5rem !important;
-}
-
-.tm-card-quote-icon svg {
-  width: 100% !important;
-  height: 100% !important;
-}
-
-.tm-card-quote {
-  font-family: var(--font-secondary) !important;
-  font-size: 0.98rem !important;
-  line-height: 1.65 !important;
-  color: #4a5568 !important;
+/* Top Row: Author on Left, Quote Icon on Right */
+.tm-card-top {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
   margin-bottom: 2rem !important;
-  font-style: normal !important;
+  width: 100% !important;
 }
 
-/* Author info */
 .tm-card-author {
   display: flex !important;
   align-items: center !important;
   gap: 1rem !important;
-  margin-top: auto !important;
 }
 
 .tm-card-avatar {
   width: 48px !important;
   height: 48px !important;
-  border-radius: 50% !important; /* Circles for headshots match ref image */
+  border-radius: 50% !important; /* Circular avatar */
   object-fit: cover !important;
   display: block !important;
   flex-shrink: 0 !important;
@@ -6078,6 +6039,102 @@ a.cf-detail-value:hover {
   color: var(--text-muted) !important;
 }
 
+.tm-card-quote-icon-right {
+  display: block !important;
+  color: #a0aec0 !important;
+  width: 20px !important;
+  height: 20px !important;
+  opacity: 0.8 !important;
+  flex-shrink: 0 !important;
+}
+
+.tm-card-quote-icon-right svg {
+  width: 100% !important;
+  height: 100% !important;
+  transform: scaleX(-1) !important; /* right facing quote */
+}
+
+/* Bottom Row: Quote Text */
+.tm-card-bottom {
+  width: 100% !important;
+}
+
+.tm-card-quote {
+  font-family: var(--font-primary) !important;
+  font-size: 1.15rem !important;
+  font-weight: 700 !important;
+  line-height: 1.55 !important;
+  color: var(--color-primary) !important;
+  margin: 0 !important;
+  font-style: normal !important;
+  text-align: left !important;
+}
+
+/* Bottom Controls Row: Scroll Progress Track + Nav Buttons */
+.tm-controls-row {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: 100% !important;
+  margin-top: 1.5rem !important;
+}
+
+.tm-progress-track {
+  flex: 1 !important;
+  height: 3px !important;
+  background-color: #e2e8f0 !important;
+  margin-right: 3rem !important;
+  position: relative !important;
+}
+
+.tm-progress-bar {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  height: 100% !important;
+  width: 0% !important;
+  background-color: var(--color-primary) !important; /* solid primary color bar */
+  transition: width 0.15s ease-out !important;
+}
+
+.tm-nav-arrows {
+  display: flex !important;
+  gap: 0.5rem !important;
+}
+
+.tm-nav-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 0 !important; /* Sharp edges */
+  border: none !important;
+  background-color: var(--color-primary) !important;
+  color: #ffffff !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  flex-shrink: 0 !important;
+}
+
+.tm-nav-btn:not(:disabled):hover {
+  background-color: var(--color-green-light) !important;
+  color: #ffffff !important;
+}
+
+.tm-nav-btn:disabled {
+  opacity: 0.35 !important;
+  cursor: not-allowed !important;
+  background-color: var(--color-primary) !important;
+  color: #ffffff !important;
+}
+
+.tm-nav-btn svg {
+  width: 20px !important;
+  height: 20px !important;
+  stroke-width: 2.2 !important;
+}
+
 /* Responsive adjustments */
 @media (max-width: 1024px) {
   .tm-card {
@@ -6086,18 +6143,29 @@ a.cf-detail-value:hover {
 }
 
 @media (max-width: 768px) {
-  .tm-header {
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    gap: 1.5rem !important;
+  .tm-card {
+    width: 85vw !important;
   }
-  .tm-nav-arrows {
-    align-self: flex-start !important;
+  .tm-progress-track {
+    margin-right: 1.5rem !important;
   }
 }
 
 @media (max-width: 600px) {
   .tm-card {
+    width: 90vw !important;
+    padding: 2rem 1.5rem !important;
+  }
+  .tm-controls-row {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 1.5rem !important;
+  }
+  .tm-progress-track {
     width: 100% !important;
+    margin-right: 0 !important;
+  }
+  .tm-nav-arrows {
+    align-self: flex-end !important;
   }
 } 

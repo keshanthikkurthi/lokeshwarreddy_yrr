@@ -756,6 +756,18 @@ document.addEventListener('DOMContentLoaded', () => {
       nextBtn.disabled = track.scrollLeft >= track.scrollWidth - track.clientWidth - 4;
     }
 
+    const progressBar = document.getElementById('tm-progress-bar');
+    function updateProgress() {
+      if (!progressBar) return;
+      const maxScroll = track.scrollWidth - track.clientWidth;
+      if (maxScroll <= 0) {
+        progressBar.style.width = '0%';
+        return;
+      }
+      const percentage = Math.min(100, Math.max(0, (track.scrollLeft / maxScroll) * 100));
+      progressBar.style.width = percentage + '%';
+    }
+
     if (prevBtn && nextBtn) {
       prevBtn.addEventListener('click', () => {
         track.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
@@ -763,8 +775,12 @@ document.addEventListener('DOMContentLoaded', () => {
       nextBtn.addEventListener('click', () => {
         track.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
       });
-      track.addEventListener('scroll', updateArrows, { passive: true });
+      track.addEventListener('scroll', () => {
+        updateArrows();
+        updateProgress();
+      }, { passive: true });
       updateArrows();
+      updateProgress();
     }
   })();
 
