@@ -1497,7 +1497,7 @@ iframe.sg-img {
   position: relative;
   width: 38px;
   height: 38px;
-  border-radius: 50%;
+  border-radius: 0 !important; /* Sharp edges */
   background-color: rgba(0, 142, 206, 0.08);
   flex-shrink: 0;
 }
@@ -1507,7 +1507,7 @@ iframe.sg-img {
   top: 50%;
   left: 50%;
   background-color: var(--color-blue);
-  border-radius: 2px;
+  border-radius: 0 !important; /* Sharp edges */
 }
 
 .lo-item-icon span:first-child {
@@ -1552,7 +1552,7 @@ iframe.sg-img {
 .lo-point-icon {
   width: 24px;
   height: 24px;
-  border-radius: 50%;
+  border-radius: 0 !important; /* Sharp edges */
   background-color: rgba(75, 183, 73, 0.12);
   color: var(--color-green-light);
   display: flex;
