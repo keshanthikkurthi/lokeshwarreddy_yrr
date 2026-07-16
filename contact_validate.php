@@ -12,8 +12,8 @@ error_reporting(E_ALL);
 header('Content-Type: application/json');
 
 
-$siteKey = '6Le5gNAsAAAAABqVmMyneZdn4fNI83hMDkIDFtU6';    //6LdOsfErAAAAAFZQH0L1Vid2_ZbQ3lKyZd5pQzbm
-$secretKey = '6Le5gNAsAAAAAIbwihKwL-ibfSOGsT4J-p_0WntD';  //6LdOsfErAAAAAN_N3fZL5C997AxjFjpAw7H6GQLp
+$siteKey = '6LeN49ssAAAAAC5bxbrLXm_F3EAvN_2ylSFG2Qck';    //6LdOsfErAAAAAFZQH0L1Vid2_ZbQ3lKyZd5pQzbm
+$secretKey = '6LeN49ssAAAAAFMxNgDSlboRBUHCkrwbQUfi5KWs';  //6LdOsfErAAAAAN_N3fZL5C997AxjFjpAw7H6GQLp
 
 
 
@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <body>
             <div class='jumbotron card card-body' style='box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;'>
             <h2>New Inquiry From Website</h2>
-            <p>Dear Chandramouli,</p>
+            <p>Dear Ushababu,</p>
             <p>We have received your inquiry and will get back to you as soon as possible.</p>
             <p>Here are the details you provided:</p>
             <ul>

@@ -417,37 +417,24 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 8. Bento Grid Card Tilting mouse hover (3D Perspective)
+  // 8. Bento Grid Card hover — clean straight lift (no 3D bend)
   const bentoCards = document.querySelectorAll('.bento-card');
   if (window.innerWidth > 1024) {
     bentoCards.forEach(card => {
       const inner = card.querySelector('.bento-card-inner') || card;
-      
-      card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        // Calculate offsets relative to card center (-0.5 to 0.5 range)
-        const dx = (x / rect.width) - 0.5;
-        const dy = (y / rect.height) - 0.5;
-        
-        // Perform 3D rotation based on mouse offset
+
+      card.addEventListener('mouseenter', () => {
         gsap.to(inner, {
-          rotateY: dx * 10,   // horizontal tilt
-          rotateX: -dy * 10,  // vertical tilt
-          transformPerspective: 1000,
+          y: -10,
           scale: 1.02,
-          duration: 0.3,
-          ease: 'power2.out'
+          duration: 0.4,
+          ease: 'power3.out'
         });
       });
 
       card.addEventListener('mouseleave', () => {
-        // Reset coordinates
         gsap.to(inner, {
-          rotateX: 0,
-          rotateY: 0,
+          y: 0,
           scale: 1,
           duration: 0.5,
           ease: 'power3.out'
