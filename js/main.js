@@ -1423,8 +1423,36 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   })();
 
+  // Mobile Feature Cards Scroll-Triggered Reveal Animation
+  (function initMobileFeatureCards() {
+    const cards = document.querySelectorAll('.feature-card');
+    if (!cards.length) return;
+
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.45 // 40-50% visibility
+    };
+
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (window.innerWidth <= 768) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-revealed');
+            obs.unobserve(entry.target);
+          }
+        }
+      });
+    }, observerOptions);
+
+    cards.forEach(card => {
+      observer.observe(card);
+    });
+  })();
+
   window.addEventListener('load', () => {
     ScrollTrigger.refresh();
   });
 
 });
+

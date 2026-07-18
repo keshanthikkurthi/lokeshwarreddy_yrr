@@ -12,8 +12,8 @@ error_reporting(E_ALL);
 header('Content-Type: application/json');
 
 
-$siteKey = '6LeN49ssAAAAAC5bxbrLXm_F3EAvN_2ylSFG2Qck';    //6LdOsfErAAAAAFZQH0L1Vid2_ZbQ3lKyZd5pQzbm
-$secretKey = '6LeN49ssAAAAAFMxNgDSlboRBUHCkrwbQUfi5KWs';  //6LdOsfErAAAAAN_N3fZL5C997AxjFjpAw7H6GQLp
+$siteKey = '6LdC19ssAAAAADKiv3Xn-bSm3XHU9xCoD--DYvYf';    //6LdOsfErAAAAAFZQH0L1Vid2_ZbQ3lKyZd5pQzbm
+$secretKey = '6LdC19ssAAAAAHZXBkXf-wqJhDOCPffdZ8ROh6UO';  //6LdOsfErAAAAAN_N3fZL5C997AxjFjpAw7H6GQLp
 
 
 
@@ -27,7 +27,7 @@ $formEmail = 'contactforum@yoshithainfra.in';
 // $emailCc = 'keshanth169@gmail.com';
 //$emailCc = 'shiva.krishna22@gmail.com';
 //$emailBcc = 'sathish@gigaqwal.com';
-$toEmail = 'tharunkola450@gmail.com'; //yoshitha.chandramouli@gmail.com
+$toEmail = 'mail@contactmarry.com'; //yoshitha.chandramouli@gmail.com
 $statusMsg = 'An error occurred. Please try again.';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -42,6 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $name = htmlspecialchars(trim($_POST['name'] ?? ''));
             $email = htmlspecialchars(trim($_POST['email'] ?? ''));
             $phone = htmlspecialchars(trim($_POST['phone'] ?? ''));
+            $service = htmlspecialchars(trim($_POST['service'] ?? ''));
             $cmnts = htmlspecialchars(trim($_POST['message'] ?? ''));
 
             if ($name === '' || $email === '' || $cmnts === '') {
@@ -61,13 +62,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <body>
             <div class='jumbotron card card-body' style='box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;'>
             <h2>New Inquiry From Website</h2>
-            <p>Dear Ushababu,</p>
+            <p>Dear Lokeshwar Reddy,</p>
             <p>We have received your inquiry and will get back to you as soon as possible.</p>
             <p>Here are the details you provided:</p>
             <ul>
                 <li><b>Name:</b> $name</li>
                 <li><b>Email:</b> $email</li>
                 <li><b>Phone:</b> $phone</li>
+                <li><b>Service Requested:</b> $service</li>
                 <li><b>Comments:</b> $cmnts</li>
             </ul>
             <p>Thank you for your interest in Real Rise.</p>
