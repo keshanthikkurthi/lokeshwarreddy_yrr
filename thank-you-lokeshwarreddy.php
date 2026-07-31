@@ -65,8 +65,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: var(--section-padding-mobile);
+      margin-top:130px;
       text-align: center;
+      margin-bottom:30px;
     }
 
     .thankyou-card {

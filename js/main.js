@@ -3,6 +3,45 @@
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Performance optimization: Lazy video & iframe IntersectionObserver
+  (function initPerformanceObservers() {
+    // 1. About Reel Video lazy load
+    const reelVideo = document.getElementById('about-reel-video');
+    if (reelVideo) {
+      const videoObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            if (reelVideo.dataset.src && !reelVideo.src) {
+              reelVideo.src = reelVideo.dataset.src;
+              reelVideo.load();
+            }
+            reelVideo.play().catch(() => {});
+          } else if (reelVideo.src) {
+            reelVideo.pause();
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '150px' });
+      videoObserver.observe(reelVideo);
+    }
+
+    // 2. Deferred Iframes (Vimeo & Google Maps)
+    const lazyIframes = document.querySelectorAll('iframe[data-src]');
+    if (lazyIframes.length > 0) {
+      const iframeObserver = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const iframe = entry.target;
+            if (iframe.dataset.src && !iframe.src) {
+              iframe.src = iframe.dataset.src;
+            }
+            obs.unobserve(iframe);
+          }
+        });
+      }, { rootMargin: '200px 0px' });
+      lazyIframes.forEach(iframe => iframeObserver.observe(iframe));
+    }
+  })();
+
   // Register GSAP ScrollTrigger plugin
   gsap.registerPlugin(ScrollTrigger);
 
@@ -24,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 2. Smooth Anchor Navigation (Lenis) — desktop nav-links + mobile menu links
   const HEADER_OFFSET = -90; // keeps target title clear of the fixed header
-  document.querySelectorAll('.nav-links a, .mobile-menu-links a').forEach((link) => {
+  document.querySelectorAll('.nav-links a, .mobile-menu-links a, .mobile-menu-cta-btn').forEach((link) => {
     link.addEventListener('click', (e) => {
       const href = link.getAttribute('href');
       if (!href || href.charAt(0) !== '#' || href.length < 2) return;
@@ -32,18 +71,37 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!target) return;
 
       e.preventDefault();
-      window.__lenis && window.__lenis.scrollTo(target, {
-        offset: HEADER_OFFSET,
-        duration: 1.2,
-        easing: (t) => 1 - Math.pow(1 - t, 3), // easeOutCubic — premium, not sluggish
-      });
 
-      // Auto-close mobile menu if it was open
-      if (mobileMenu && mobileMenu.classList.contains('active') && mobileToggle) {
+      const isMobileMenuOpen = mobileMenu && mobileMenu.classList.contains('active');
+
+      const doScroll = () => {
+        if (window.__lenis) {
+          // Ensure Lenis is running before scrolling
+          window.__lenis.start();
+          window.__lenis.scrollTo(target, {
+            offset: HEADER_OFFSET,
+            duration: 1.2,
+            easing: (t) => 1 - Math.pow(1 - t, 3),
+          });
+        } else {
+          // Native scroll fallback (works on all devices)
+          const headerHeight = document.querySelector('header')?.offsetHeight || 80;
+          const targetTop = target.getBoundingClientRect().top + window.scrollY - headerHeight - 10;
+          window.scrollTo({ top: targetTop, behavior: 'smooth' });
+        }
+      };
+
+      if (isMobileMenuOpen && mobileToggle) {
+        // Close menu first, then scroll after the menu animation completes
         mobileToggle.click();
+        // 650ms matches the menu slide-out transition (0.6s + buffer)
+        setTimeout(doScroll, 650);
+      } else {
+        doScroll();
       }
     });
   });
+
 
   // 3. Magnetic Hover Buttons (Magnet Effect)
   const magneticBtns = document.querySelectorAll('.btn-primary, .btn-secondary, .nav-arrow-btn');
@@ -104,9 +162,10 @@ document.addEventListener('DOMContentLoaded', () => {
         gsap.to(spans[2], { y: -7, rotate: -45, duration: 0.3 });
 
         // Stagger list elements in Mobile Menu
-        gsap.fromTo(mobileLinks,
+        const mobileAnimEls = mobileMenu.querySelectorAll('.mobile-menu-link, .mobile-menu-cta');
+        gsap.fromTo(mobileAnimEls,
           { opacity: 0, y: 30 },
-          { opacity: 1, y: 0, stagger: 0.1, delay: 0.3, duration: 0.5, ease: 'power3.out' }
+          { opacity: 1, y: 0, stagger: 0.08, delay: 0.3, duration: 0.5, ease: 'power3.out' }
         );
 
         // Move focus into the dialog for keyboard/screen-reader users
@@ -131,13 +190,10 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    mobileLinks.forEach(link => {
-      link.addEventListener('click', () => {
-        if (mobileMenu.classList.contains('active')) {
-          toggleMenu();
-        }
-      });
-    });
+
+    // Note: mobile menu link clicks are handled by the anchor nav listener above,
+    // which closes the menu and then scrolls to the target section.
+
   }
 
   // 5. Header Scroll Effect
@@ -159,7 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // Parallax zoom effect on Hero Image
-  gsap.to('.hero-main-img', {
+  gsap.to('.hero-bg-image', {
     yPercent: 12,
     ease: 'none',
     scrollTrigger: {
@@ -1428,25 +1484,52 @@ document.addEventListener('DOMContentLoaded', () => {
     const cards = document.querySelectorAll('.feature-card');
     if (!cards.length) return;
 
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.45 // 40-50% visibility
-    };
+    let observer = null;
 
-    const observer = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if (window.innerWidth <= 768) {
-          if (entry.isIntersecting) {
+    function isMobile() {
+      return window.innerWidth <= 768;
+    }
+
+    function setupObserver() {
+      if (observer) {
+        observer.disconnect();
+        observer = null;
+      }
+
+      if (!isMobile()) {
+        // On desktop, remove any lingering is-revealed classes
+        cards.forEach(card => card.classList.remove('is-revealed'));
+        return;
+      }
+
+      const observerOptions = {
+        root: null,
+        rootMargin: '-10% 0px -10% 0px',
+        threshold: 0.3 // Trigger when 30% of the card is visible
+      };
+
+      observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (isMobile() && entry.isIntersecting) {
             entry.target.classList.add('is-revealed');
             obs.unobserve(entry.target);
           }
-        }
-      });
-    }, observerOptions);
+        });
+      }, observerOptions);
 
-    cards.forEach(card => {
-      observer.observe(card);
+      cards.forEach(card => {
+        // If already in view on load, reveal immediately
+        observer.observe(card);
+      });
+    }
+
+    setupObserver();
+
+    // Re-run on resize (debounced)
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(setupObserver, 250);
     });
   })();
 
